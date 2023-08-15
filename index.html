@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, 
+        body {
+            font-size: 18px;
+        }
+
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .control {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            position: relative;
+            z-index: 99;
+            background-color: rgba(0, 0, 0, .3);
+            color: #fff;
+        }
+
+        .control span {
+            display: inline-block;
+            width: 5rem;
+            text-align: start;
+        }
+
+        .example {
+            flex: 1 1 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .example>.box {
+            width: 300px;
+            height: 150px;
+            background-color: #000;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 1s;
+        }
+
+        .example>.transform-variable {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 90;
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="control" id="control">
+            <label for="">
+                <span>scaleX</span>
+                <input type="range" name="" id="scaleX" min="-10" max="10" value="1">
+                <span>1</span>
+            </label>
+
+            <label for="">
+                <span>skewY</span>
+                <input type="range" name="" id="skewY" min="-10" max="10" value="0">
+                <span>0</span>
+            </label>
+
+            <label for="">
+                <span>skewX</span>
+                <input type="range" name="" id="skewX" min="-10" max="10" value="0">
+                <span>0</span>
+            </label>
+
+            <label for="">
+                <span>scaleY</span>
+                <input type="range" name="" id="scaleY" min="-10" max="10" value="1">
+                <span>1</span>
+            </label>
+
+            <label for="">
+                <span>translateX</span>
+                <input type="range" name="" id="translateX" min="-100" max="100 " value="0">
+                <span>0</span>
+            </label>
+
+            <label for="">
+                <span>translateY</span>
+                <input type="range" name="" id="translateY" min="-100" max="100 " value="0">
+                <span>0</span>
+            </label>
+        </div>
+
+        <div class="example">
+            <div class="box" id="box">Example</div>
+            <div id="transformVariable" class="transform-variable">transform: matrix(1, 0, 0, 1, -2, 53)</div>
+        </div>
+    </div>
+
+    <script>
+        const labels = document.querySelectorAll("label")
+        const element = document.querySelector("#box")
+
+        
+        let [scaleX, skewY, skewX, scaleY, translateX, translateY] = [1, 0, 0, 1, 0, 0]
+        // let transform = `matrix(${scaleX}, ${skewY}, ${skewX}, ${scaleY}, ${translateX}, ${translateY})`
+        let transform;
+
+        labels.forEach((label) => {
+            const input = label.children[1]
+
+            input.addEventListener("input", (event) => {
+                label.children[2].textContent = event.target.value
+
+                switch (event.target.id) {
+                    case "scaleX":
+                        scaleX = event.target.value
+                        break;
+                    case "skewY":
+                        skewY = event.target.value / 10
+                        break;
+                    case "skewX":
+                        skewX = event.target.value / 10
+                        break;
+                    case "scaleY":
+                        scaleY = event.target.value
+                        break;
+                    case "translateX":
+                        translateX = event.target.value
+                        break;
+                    case "translateY":
+                        translateY = event.target.value
+                        break;
+                }
+
+                transform = `matrix(${scaleX}, ${skewY}, ${skewX}, ${scaleY}, ${translateX}, ${translateY})`
+                element.style.setProperty("transform", transform);
+                document.querySelector("#transformVariable").textContent = "transform: " + transform
+            })
+        })
+    </script>
+</body>
+
+</html>
