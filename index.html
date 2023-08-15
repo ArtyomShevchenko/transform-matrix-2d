@@ -12,7 +12,7 @@
             box-sizing: border-box;
         }
 
-        html, 
+        html,
         body {
             font-size: 18px;
         }
@@ -23,21 +23,56 @@
             flex-direction: column;
         }
 
-        .control {
+        .control-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 1rem;
+            gap: .5rem;
+            padding: 1rem 1rem;
             position: relative;
             z-index: 99;
             background-color: rgba(0, 0, 0, .3);
             color: #fff;
         }
 
-        .control span {
+        .control-container .wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .7rem;
+        }
+
+        .control-container .reset-btn {
+            padding: 0.3rem 2rem;
+            align-self: flex-end;
+            border: none;
+            background-color: rgba(0, 0, 0, .3);
+            color: #fff;
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .control-container .reset-btn:hover {
+            background-color: rgba(0, 0, 0, .4);
+        }
+
+        .control {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .control span,
+        .control i {
             display: inline-block;
             width: 5rem;
             text-align: start;
+        }
+
+        .control i {
+            font-style: normal;
+            width: 2rem;
+            text-align: end;
         }
 
         .example {
@@ -58,68 +93,68 @@
             justify-content: center;
             transition: all 1s;
         }
-
-        .example>.transform-variable {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 90;
-            color: red;
-        }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <div class="control" id="control">
-            <label for="">
-                <span>scaleX</span>
-                <input type="range" name="" id="scaleX" min="-10" max="10" value="1">
-                <span>1</span>
-            </label>
-
-            <label for="">
-                <span>skewY</span>
-                <input type="range" name="" id="skewY" min="-10" max="10" value="0">
-                <span>0</span>
-            </label>
-
-            <label for="">
-                <span>skewX</span>
-                <input type="range" name="" id="skewX" min="-10" max="10" value="0">
-                <span>0</span>
-            </label>
-
-            <label for="">
-                <span>scaleY</span>
-                <input type="range" name="" id="scaleY" min="-10" max="10" value="1">
-                <span>1</span>
-            </label>
-
-            <label for="">
-                <span>translateX</span>
-                <input type="range" name="" id="translateX" min="-100" max="100 " value="0">
-                <span>0</span>
-            </label>
-
-            <label for="">
-                <span>translateY</span>
-                <input type="range" name="" id="translateY" min="-100" max="100 " value="0">
-                <span>0</span>
-            </label>
-        </div>
-
         <div class="example">
             <div class="box" id="box">Example</div>
-            <div id="transformVariable" class="transform-variable">transform: matrix(1, 0, 0, 1, -2, 53)</div>
         </div>
+
+        <div class="control-container">
+            <div class="wrapper">
+                <div id="transformVariable" class="transform-variable">transform: matrix(1, 0, 0, 1, -2, 53)</div>
+                <button class="reset-btn" id="resetBtn">Reset</button>
+                <div class="control" id="control">
+                    <label for="">
+                        <span>scaleX</span>
+                        <input type="range" name="" id="scaleX" min="-10" max="10" value="1">
+                        <i>1</i>
+                    </label>
+
+                    <label for="">
+                        <span>skewY</span>
+                        <input type="range" name="" id="skewY" min="-10" max="10" value="0">
+                        <i>0</i>
+                    </label>
+
+                    <label for="">
+                        <span>skewX</span>
+                        <input type="range" name="" id="skewX" min="-10" max="10" value="0">
+                        <i>0</i>
+                    </label>
+
+                    <label for="">
+                        <span>scaleY</span>
+                        <input type="range" name="" id="scaleY" min="-10" max="10" value="1">
+                        <i>1</i>
+                    </label>
+
+                    <label for="">
+                        <span>translateX</span>
+                        <input type="range" name="" id="translateX" min="-100" max="100 " value="0">
+                        <i>0</i>
+                    </label>
+
+                    <label for="">
+                        <span>translateY</span>
+                        <input type="range" name="" id="translateY" min="-100" max="100 " value="0">
+                        <i>0</i>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+
+
     </div>
 
     <script>
         const labels = document.querySelectorAll("label")
         const element = document.querySelector("#box")
 
-        
+
         let [scaleX, skewY, skewX, scaleY, translateX, translateY] = [1, 0, 0, 1, 0, 0]
         // let transform = `matrix(${scaleX}, ${skewY}, ${skewX}, ${scaleY}, ${translateX}, ${translateY})`
         let transform;
@@ -155,6 +190,31 @@
                 element.style.setProperty("transform", transform);
                 document.querySelector("#transformVariable").textContent = "transform: " + transform
             })
+        })
+
+        const resetBtn = document.querySelector("#resetBtn").addEventListener("click", () => {
+            transform = `matrix(1, 0, 0, 1, 0, 0)`
+            element.style.setProperty("transform", transform);
+
+            labels.forEach((label) => {
+                const input = label.children[1]
+
+                switch (label.children[1].id) {
+                    case "scaleX":
+                        label.children[1].value = 1;
+                        label.children[2].textContent = 1
+                        break
+                    case "scaleY":
+                        label.children[1].value = 1;
+                        label.children[2].textContent = 1
+                        break
+                    default:
+                        input.value = 0;
+                        label.children[2].textContent = 0
+                }
+            })
+
+            document.querySelector("#transformVariable").textContent = "transform: " + transform
         })
     </script>
 </body>
